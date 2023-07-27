@@ -6,10 +6,20 @@ from flashalgo import FlashAlgo
 from flashmatch_types import FlashMatchInput, Flash
 import yaml
 
+config = yaml.load(open("flashmatch.cfg"), Loader=yaml.Loader)["ToyMC"]
+time_algo = config["TimeAlgo"]
+track_algo = config["TrackAlgo"]
+periodTPC = config["PeriodTPC"]
+periodPMT = config["PeriodPMT"]
+ly_variation = config["LightYieldVariation"]
+pe_variation = config["PEVariation"]
+posx_variation = config['PosXVariation']
+truncate_tpc = config["TruncateTPC"]
+num_tracks = config["NumTracks"]
+if 'NumpySeed' in config:
+    np.random.seed(config['NumpySeed'])
+
 detector = yaml.load(open("detector_specs.cfg"), Loader=yaml.Loader)['DetectorSpecs']
-periodTPC = [-1000, 1000]
-pe_variation = 0.0
-truncate_tpc = 0
 
 def make_flashmatch_inputs(num_match=None):
     """
@@ -20,7 +30,7 @@ def make_flashmatch_inputs(num_match=None):
     Returns
     Generated trajectory, tpc, pmt, and raw tpc arrays
     """
-    num_tracks = 10
+    #num_tracks = 10
 
     if num_match is None:
         num_match = num_tracks
@@ -78,7 +88,7 @@ def gen_trajectories(num_tracks):
     Returns
         a list of trajectories, each is a pair of 3D start and end points
     """
-    track_algo = 'random'
+    #track_algo = 'random'
 
     res = []
 
@@ -119,8 +129,8 @@ def gen_xt_shift(n):
         a list of pairs, (flash time, dx to be applied on TPC points)
     """
     #can be configured with config file, but default in previous code is to not have one
-    time_algo = 'random'
-    periodPMT = [-1000, 1000]
+    #time_algo = 'random'
+    #periodPMT = [-1000, 1000]
 
     time_dx_v = []
     duration = periodPMT[1] - periodPMT[0]
@@ -149,8 +159,8 @@ def make_qcluster(track):
         a qcluster instance 
     """
     qcluster_algo = LightPath(detector, cfg_file=None)
-    ly_variation = 0.0
-    posx_variation = 0.0
+    #ly_variation = 0.0
+    #posx_variation = 0.0
 
     qcluster = qcluster_algo.make_qcluster_from_track(track)
     # apply variation if needed
