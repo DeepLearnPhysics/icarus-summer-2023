@@ -16,7 +16,7 @@ class LightPath():
     
     def fill_qcluster(self, pt1, pt2, qcluster):
         """
-        Fill a qcluster instance based given trajectory poins and detector specs
+        Fill a qcluster instance based given trajectory points and detector specs
         ---------
         Arguments
           pt1, pt2: 3D trajectory points
