@@ -185,3 +185,5 @@ def make_flash(self, qcluster):
         flash.pe_err_v.append(np.sqrt(estimate))
 
     return flash
+
+make_flashmatch_inputs()
