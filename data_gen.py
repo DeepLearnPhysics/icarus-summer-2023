@@ -137,9 +137,9 @@ def gen_xt_shift(n):
     for idx in range(n):
         t,x=0.,0.
         if time_algo == 'random':
-            t = np.random.random() * duration + self.periodPMT[0]
+            t = np.random.random() * duration + periodPMT[0]
         elif time_algo == 'periodic':
-            t = (idx + 0.5) * duration / n + self.periodPMT[0]
+            t = (idx + 0.5) * duration / n + periodPMT[0]
         elif time_algo == 'same':
             t = 0.
         else:
