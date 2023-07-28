@@ -82,7 +82,7 @@ def make_flashmatch_inputs(num_match=None):
         if valid_match:
             result.true_match.append((idx,idx))
 
-    print(qcluster)
+    print(result.true_match)
     return result
 
 def gen_trajectories(num_tracks):
