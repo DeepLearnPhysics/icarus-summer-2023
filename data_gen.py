@@ -5,6 +5,7 @@ from lightpath import LightPath
 from flashalgo import FlashAlgo
 from flashmatch_types import FlashMatchInput, Flash
 import yaml
+from photon_library import PhotonLibrary
 
 cfg_file = "icarus-summer-2023/flashmatch.cfg"
 config = yaml.load(open("icarus-summer-2023/flashmatch.cfg"), Loader=yaml.Loader)["ToyMC"]
@@ -21,7 +22,7 @@ if 'NumpySeed' in config:
     np.random.seed(config['NumpySeed'])
 
 detector = yaml.load(open("icarus-summer-2023/detector_specs.yml"), Loader=yaml.Loader)['DetectorSpecs']
-plib = "/sdf/home/c/carsmith/ondemand/data/plib.h5"
+plib = PhotonLibrary()
 qcluster_algo = LightPath(detector, cfg_file)
 flash_algo = FlashAlgo(detector, plib, cfg_file)
 
