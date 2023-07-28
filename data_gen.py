@@ -84,7 +84,6 @@ def make_flashmatch_inputs(num_match=None):
             result.true_match.append((idx,idx))
 
     print(result.true_match)
-    scatter_points(result.all_pts_v,color='orange',markersize=3)
     return result
 
 def gen_trajectories(num_tracks):
