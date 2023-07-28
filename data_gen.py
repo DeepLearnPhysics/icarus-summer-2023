@@ -6,6 +6,7 @@ from flashalgo import FlashAlgo
 from flashmatch_types import FlashMatchInput, Flash
 import yaml
 from photon_library import PhotonLibrary
+from .points import scatter_points
 
 cfg_file = "icarus-summer-2023/flashmatch.cfg"
 config = yaml.load(open("icarus-summer-2023/flashmatch.cfg"), Loader=yaml.Loader)["ToyMC"]
@@ -83,6 +84,7 @@ def make_flashmatch_inputs(num_match=None):
             result.true_match.append((idx,idx))
 
     print(result.true_match)
+    scatter_points(result.qcluster_v,color=qcluster[:,3],markersize=3)
     return result
 
 def gen_trajectories(num_tracks):
