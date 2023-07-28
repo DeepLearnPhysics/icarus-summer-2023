@@ -5,7 +5,8 @@ import torch
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 class PhotonLibrary(object):
-    def __init__(self, fname='photon_library/plib_combined.h5', lut_file=None):
+    def __init__(self, fname='/sdf/home/c/carsmith/ondemand/data/plib.h5', lut_file=None):
+        #fname='photon_library/plib_combined.h5'
         if not os.path.isfile(fname):
             print('Downloading photon library file... (>300MByte, may take minutes')
             #os.system('curl -O https://www.nevis.columbia.edu/~kazuhiro/plib.h5 ./')
