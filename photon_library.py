@@ -8,7 +8,8 @@ class PhotonLibrary(object):
     def __init__(self, fname='photon_library/plib_combined.h5', lut_file=None):
         if not os.path.isfile(fname):
             print('Downloading photon library file... (>300MByte, may take minutes')
-            os.system('curl -O https://www.nevis.columbia.edu/~kazuhiro/plib.h5 ./')
+            #os.system('curl -O https://www.nevis.columbia.edu/~kazuhiro/plib.h5 ./')
+            os.system('curl -O /sdf/home/c/carsmith/ondemand/data/plib.h5 ./')
         if not os.path.isfile(fname):
             print('Error: failed to download the photon library file...')
             raise Exception
