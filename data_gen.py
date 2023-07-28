@@ -6,7 +6,7 @@ from flashalgo import FlashAlgo
 from flashmatch_types import FlashMatchInput, Flash
 import yaml
 from photon_library import PhotonLibrary
-from .points import scatter_points
+from points import scatter_points
 
 cfg_file = "icarus-summer-2023/flashmatch.cfg"
 config = yaml.load(open("icarus-summer-2023/flashmatch.cfg"), Loader=yaml.Loader)["ToyMC"]
