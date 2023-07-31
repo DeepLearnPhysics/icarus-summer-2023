@@ -32,8 +32,8 @@ class DataGen():
 
         self.detector = yaml.load(open("icarus-summer-2023/detector_specs.yml"), Loader=yaml.Loader)['DetectorSpecs']
         self.plib = PhotonLibrary()
-        self.qcluster_algo = LightPath(detector, cfg_file)
-        self.flash_algo = FlashAlgo(detector, plib, cfg_file)
+        self.qcluster_algo = LightPath(self.detector, self.cfg_file)
+        self.flash_algo = FlashAlgo(self.detector, self.plib, self.cfg_file)
 
 
     def make_flashmatch_inputs(self, num_match=None):
