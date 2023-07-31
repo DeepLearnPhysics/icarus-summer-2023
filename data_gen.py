@@ -209,6 +209,7 @@ def make_flash(qcluster):
 
 #writing input to outfile
 match_input = make_flashmatch_inputs()
+np_result = None
 
 for idx in range(0, len(match_input.track_v)):
     #tpc data
