@@ -53,7 +53,7 @@ class DataGen():
         result = FlashMatchInput()
 
         # generate 3D trajectories inside the detector
-        track_v = self.gen_trajectories(self, num_match)
+        track_v = self.gen_trajectories(num_match)
         result.track_v = track_v
 
         # generate flash time and x shift (for reco x position assuming trigger time)
