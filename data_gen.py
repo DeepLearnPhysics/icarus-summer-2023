@@ -4,6 +4,7 @@ import numpy as np
 from lightpath import LightPath
 from flashalgo import FlashAlgo
 from flashmatch_types import FlashMatchInput, Flash
+from plot import plot_qcluster
 import yaml
 from photon_library import PhotonLibrary
 from points import scatter_points
@@ -265,3 +266,8 @@ def attribute_names():
     ]
 
 np.savetxt('test.csv', np_result, delimiter=',', header=','.join(attribute_names()))
+
+#visualizing
+def gen_plot():
+    q_graph = plot_qcluster(match_input.qcluster_v[0])
+    return q_graph
