@@ -248,29 +248,20 @@ for idx in range(0, len(match_input.track_v)):
 
 def attribute_names():
     return [
-        'event',
-        'entry',
-        'loss',
+        'idx',
         'flash_idx',
-        'track_idx',
-        'true_min_x',
-        'true_max_x',
-        'qcluster_min_x',
-        'qcluster_max_x',
-        'reco_min_x',
-        'reco_max_x',
-        'matched',
-        'qcluster_num_points',
+        'qcluster_idx',
+        'raw_qcluster_min_x',
+        'raw_qcluster_max_x',
+        'qcluster_min_x'
+        'qcluster_max_x'
         'qcluster_sum',
-        'qcluster_length',
+        'qcluster_len',
         'qcluster_time_true',
-        'hypothesis_sum',  # Hypothesis flash sum
-        'flash_sum', # OpFlash Sum
-        'flash_time',
+        'flash_sum',
         'flash_time_true',
         'flash_dt_prev',
         'flash_dt_next',
-        'duration'
     ]
 
 np.savetxt('test.csv', np_result, delimiter=',', header=','.join(attribute_names()))
