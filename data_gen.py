@@ -8,7 +8,6 @@ from plot import plot_qcluster
 import yaml
 from photon_library import PhotonLibrary
 from points import scatter_points
-import os
 
 cfg_file = "icarus-summer-2023/flashmatch.cfg"
 config = yaml.load(open("icarus-summer-2023/flashmatch.cfg"), Loader=yaml.Loader)["ToyMC"]
@@ -269,8 +268,8 @@ np.savetxt('test.csv', np_result, delimiter=',', header=','.join(attribute_names
 
 #visualizing
 def gen_plot():
-    print(match_input.qcluster_v)
-    q_graph = plot_qcluster(match_input.qcluster_v[:, 0])
+    print(match_input.qcluster_v[0])
+    q_graph = plot_qcluster(match_input.qcluster_v[0])
     return q_graph
 
 gen_plot()
