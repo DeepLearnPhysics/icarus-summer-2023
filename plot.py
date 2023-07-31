@@ -47,4 +47,4 @@ def plot_track(track, npts=100):
     # vis_array=toymc.plib.VisibilityFromXYZ(xyzs[:, :3]).cpu().numpy()
     # xyzs[:, 3] = np.sum(vis_array, axis=1)
     # visualize
-    return scatter_points(xyzs,color=xyzs[:,3],markersize=3)
+    return scatter_points(xyzs,markersize=3)
