@@ -269,7 +269,7 @@ np.savetxt('test.csv', np_result, delimiter=',', header=','.join(attribute_names
 
 #visualizing
 def gen_plot():
-    q_graph = plot_qcluster(match_input.qcluster_v)
+    q_graph = plot_qcluster(match_input.qcluster_v[:, 0])
     return q_graph
 
 gen_plot()
