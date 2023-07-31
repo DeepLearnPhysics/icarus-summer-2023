@@ -28,7 +28,7 @@ def plot_qcluster(qcluster, npts=100):
     """
     Plot a flashmatch::QCluster_t
     """
-    return scatter_points(qcluster, color=qcluster[:,3], markersize=3)
+    return scatter_points(qcluster, markersize=3)
 
 
 #modified from original
