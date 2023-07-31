@@ -212,13 +212,13 @@ match_input = make_flashmatch_inputs()
 
 for idx in range(0, len(match_input.track_v)):
     #tpc data
-    qcluster = match_input.qcluster_v[num_tracks]
-    raw_qcluster = match_input.raw_qcluster_v[num_tracks]
-    tpc_idx = match_input.qcluster_v[num_tracks].idx
+    qcluster = match_input.qcluster_v[idx]
+    raw_qcluster = match_input.raw_qcluster_v[idx]
+    tpc_idx = match_input.qcluster_v[idx].idx
 
     #pmt data
-    flash = match_input.flash_v[num_tracks]
-    flash_idx = match_input.flash_v[num_tracks].idx
+    flash = match_input.flash_v[idx]
+    flash_idx = match_input.flash_v[idx].idx
 
     data = []
     store = np.array([[
