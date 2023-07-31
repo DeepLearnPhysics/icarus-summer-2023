@@ -7,6 +7,7 @@ from flashmatch_types import FlashMatchInput, Flash
 import yaml
 from photon_library import PhotonLibrary
 from points import scatter_points
+import os
 
 cfg_file = "icarus-summer-2023/flashmatch.cfg"
 config = yaml.load(open("icarus-summer-2023/flashmatch.cfg"), Loader=yaml.Loader)["ToyMC"]
@@ -204,4 +205,71 @@ def make_flash(qcluster):
 
     return flash
 
-make_flashmatch_inputs()
+#make_flashmatch_inputs()
+
+#writing input to outfile
+match_input = make_flashmatch_inputs()
+
+for idx in num_tracks:
+    #tpc data
+    qcluster = match_input.qcluster_v[num_tracks]
+    raw_qcluster = match_input.raw_qcluster_v[num_tracks]
+    tpc_idx = match_input.qcluster_v[num_tracks].idx
+
+    #pmt data
+    flash = match_input.flash_v[num_tracks]
+    flash_idx = match_input.flash_v[num_tracks].idx
+
+    data = []
+    store = np.array([[
+        idx,
+        flash.idx,
+        qcluster.idx,
+        raw_qcluster.xmin,
+        raw_qcluster.xmax,
+        qcluster.xmin,
+        qcluster.xmax,
+        qcluster.sum(),
+        qcluster.length(),
+        qcluster.time_true,
+        flash.sum(),
+        flash.time,
+        flash.time_true,
+        flash.dt_prev,
+        flash.dt_next
+    ]])
+    data.append(store)
+    np_idx = np.concatenate(data, axis=0)
+    if np_result is None:
+        np_result = np_idx
+    else:
+        np_result = np.concatenate([np_result,np_idx],axis=0)
+
+def attribute_names():
+    return [
+        'event',
+        'entry',
+        'loss',
+        'flash_idx',
+        'track_idx',
+        'true_min_x',
+        'true_max_x',
+        'qcluster_min_x',
+        'qcluster_max_x',
+        'reco_min_x',
+        'reco_max_x',
+        'matched',
+        'qcluster_num_points',
+        'qcluster_sum',
+        'qcluster_length',
+        'qcluster_time_true',
+        'hypothesis_sum',  # Hypothesis flash sum
+        'flash_sum', # OpFlash Sum
+        'flash_time',
+        'flash_time_true',
+        'flash_dt_prev',
+        'flash_dt_next',
+        'duration'
+    ]
+
+np.savetxt('test.csv', np_result, delimiter=',', header=','.join(attribute_names()))
