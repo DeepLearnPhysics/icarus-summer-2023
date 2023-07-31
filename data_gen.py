@@ -15,7 +15,7 @@ class DataGen():
         self.configure()
 
     def configure(self):
-        #cfg_file = "icarus-summer-2023/flashmatch.cfg"
+        self.cfg_file = "icarus-summer-2023/flashmatch.cfg"
         config = yaml.load(open("icarus-summer-2023/flashmatch.cfg"), Loader=yaml.Loader)["ToyMC"]
         self.time_algo = config["TimeAlgo"]
         self.track_algo = config["TrackAlgo"]
