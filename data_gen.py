@@ -11,8 +11,8 @@ from points import scatter_points
 
 class DataGen():
 
-    def __init__(self, detector_cfg, cfg, photon_library=None):
-        self.configure(detector_cfg, cfg, photon_library)
+    def __init__(self):
+        self.configure()
 
     def configure(self, detector_file, cfg, particleana, opflashana, photon_library):
         #cfg_file = "icarus-summer-2023/flashmatch.cfg"
