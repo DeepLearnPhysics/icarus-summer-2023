@@ -210,7 +210,7 @@ def make_flash(qcluster):
 #writing input to outfile
 match_input = make_flashmatch_inputs()
 
-for idx in range(0, num_tracks):
+for idx in range(0, enumerate(match_input.track_v)):
     #tpc data
     qcluster = match_input.qcluster_v[num_tracks]
     raw_qcluster = match_input.raw_qcluster_v[num_tracks]
