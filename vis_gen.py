@@ -12,6 +12,3 @@ def gen_plot():
     print(match_input.qcluster_v[0].qpt_v)
     q_graph = plot_qcluster(match_input.qcluster_v[0].qpt_v)
     return q_graph
-
-go_obj = gen_plot()
-go_obj.show()
