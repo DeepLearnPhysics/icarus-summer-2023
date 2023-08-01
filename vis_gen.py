@@ -1,12 +1,7 @@
-import numpy as np
-from lightpath import LightPath
-from flashalgo import FlashAlgo
-from flashmatch_types import FlashMatchInput, Flash
 from plot import plot_qcluster
-import yaml
-from photon_library import PhotonLibrary
-from points import scatter_points
 from data_gen import DataGen
+import plotly.express as px
+import plotly.graph_objects as go
 
 gen = DataGen()
 match_input = gen.make_flashmatch_inputs()
@@ -18,4 +13,7 @@ def gen_plot():
     q_graph = plot_qcluster(match_input.qcluster_v[0].qpt_v)
     return q_graph
 
-gen_plot()
+go_obj = gen_plot()
+
+fig = px.scatter_3d(go_obj.voxels, x = go_obj.voxels[:, 0], y = go_obj.voxels[:, 1], z = go_obj.voxels[:, 2], color = 'species')
+fig.show()
