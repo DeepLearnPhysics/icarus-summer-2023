@@ -1,15 +1,15 @@
-from plot import plot_qcluster
-from data_gen import DataGen
+from .plot import plot_qcluster
+from .data_gen import DataGen
 import plotly.express as px
 import plotly.graph_objects as go
 import yaml
 import numpy as np
-from points import scatter_points
+from .points import scatter_points
 import torch
 
-gen = DataGen()
-match_input = gen.make_flashmatch_inputs()
-np_result = None
+#gen = DataGen()
+#match_input = gen.make_flashmatch_inputs()
+#np_result = None
 
 #visualizing
 def gen_qcluster_plot():
@@ -17,8 +17,8 @@ def gen_qcluster_plot():
     q_graph = plot_qcluster(match_input.qcluster_v[1].qpt_v)
     return q_graph
 
-def make_flash_plot(flash, x=None, **kwargs):
-    detector = yaml.load(open("detector_specs.yml"), Loader=yaml.Loader)['DetectorSpecs']
+def make_flash_plot(flash, yml_detector, x=None, **kwargs):
+    detector = yaml.load(open(yml_detector), Loader=yaml.Loader)['DetectorSpecs']
     nopch = detector['PhotonLibraryNOpDetChannels']
     pmt_positions = []
     if x is not None and not isinstance(x, float):

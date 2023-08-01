@@ -18,8 +18,7 @@ def scatter_points(points, dim=3, markersize=5, color='orange', colorscale=None,
     """
     if type(points) == type(torch.Tensor()):
         points = points.cpu().numpy()
-    print(type(points))
-    print(type(points)==type(torch.Tensor()))
+
     if hovertext is None and color is not None and not type(color) == type(str()):
         hovertext = ['%.2f' % float(v) for v in color]
     if cmin is None and color is not None and not type(color) == type(str()):

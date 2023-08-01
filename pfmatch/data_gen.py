@@ -10,12 +10,12 @@ from .points import scatter_points
 
 class DataGen():
 
-    def __init__(self):
-        self.configure()
+    def __init__(self,yml_detector,yml_match):
+        self.configure(yml_detector,yml_match)
 
-    def configure(self):
-        self.cfg_file = "flashmatch.cfg"
-        config = yaml.load(open("flashmatch.cfg"), Loader=yaml.Loader)["ToyMC"]
+    def configure(self,yml_detector,yml_match):
+        self.cfg_file = yml_match
+        config = yaml.load(open(self.cfg_file), Loader=yaml.Loader)["ToyMC"]
         self.time_algo = config["TimeAlgo"]
         self.track_algo = config["TrackAlgo"]
         self.periodTPC = config["PeriodTPC"]
@@ -29,7 +29,7 @@ class DataGen():
         if 'NumpySeed' in config:
             np.random.seed(config['NumpySeed'])
 
-        self.detector = yaml.load(open("detector_specs.yml"), Loader=yaml.Loader)['DetectorSpecs']
+        self.detector = yaml.load(open(yml_detector), Loader=yaml.Loader)['DetectorSpecs']
         self.plib = PhotonLibrary()
         self.qcluster_algo = LightPath(self.detector, self.cfg_file)
         self.flash_algo = FlashAlgo(self.detector, self.plib, self.cfg_file)
