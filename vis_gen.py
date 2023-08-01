@@ -4,7 +4,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import yaml
 import numpy as np
-from .points import scatter_points
+from points import scatter_points
 
 gen = DataGen()
 match_input = gen.make_flashmatch_inputs()
