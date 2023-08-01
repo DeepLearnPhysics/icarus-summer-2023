@@ -16,7 +16,7 @@ def gen_qcluster_plot():
     q_graph = plot_qcluster(match_input.qcluster_v[1].qpt_v)
     return q_graph
 
-def gen_flash_plot(flash, x=None, **kwargs):
+def make_flash_plot(flash, x=None, **kwargs):
     detector = yaml.load(open("icarus-summer-2023/detector_specs.yml"), Loader=yaml.Loader)['DetectorSpecs']
     nopch = detector['PhotonLibraryNOpDetChannels']
     pmt_positions = []
@@ -34,3 +34,7 @@ def gen_flash_plot(flash, x=None, **kwargs):
         return scatter_points(pmt_positions[:, 0:3], color=pmt_positions[:, -1], dim=3, markersize=3, **kwargs)
     else:
         return scatter_points(pmt_positions[:, [2, 1]], color=pmt_positions[:, -1], dim=2, markersize=15, **kwargs)
+    
+def gen_flash_plot():
+    f_graph = make_flash_plot(match_input.flash_v[0].pe_v)
+    return f_graph
