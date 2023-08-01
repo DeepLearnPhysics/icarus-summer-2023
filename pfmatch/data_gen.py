@@ -223,44 +223,44 @@ class DataGen():
 #make_flashmatch_inputs()
 
 #writing input to outfile
-gen = DataGen()
-match_input = gen.make_flashmatch_inputs()
-np_result = None
+#gen = DataGen()
+#match_input = gen.make_flashmatch_inputs()
+#np_result = None
 
-for idx in range(0, len(match_input.track_v)):
-    #tpc data
-    qcluster = match_input.qcluster_v[idx]
-    raw_qcluster = match_input.raw_qcluster_v[idx]
-    tpc_idx = match_input.qcluster_v[idx].idx
-
-    #pmt data
-    flash = match_input.flash_v[idx]
-    flash_idx = match_input.flash_v[idx].idx
-
-    data = []
-    store = np.array([[
-        idx,
-        flash.idx,
-        qcluster.idx,
-        raw_qcluster.xmin,
-        raw_qcluster.xmax,
-        qcluster.xmin,
-        qcluster.xmax,
-        qcluster.sum(),
-        qcluster.length(),
-        qcluster.time_true,
-        flash.sum(),
-        flash.time,
-        flash.time_true,
-        flash.dt_prev,
-        flash.dt_next
-    ]])
-    data.append(store)
-    np_idx = np.concatenate(data, axis=0)
-    if np_result is None:
-        np_result = np_idx
-    else:
-        np_result = np.concatenate([np_result,np_idx],axis=0)
+#for idx in range(0, len(match_input.track_v)):
+#    #tpc data
+#    qcluster = match_input.qcluster_v[idx]
+#    raw_qcluster = match_input.raw_qcluster_v[idx]
+#    tpc_idx = match_input.qcluster_v[idx].idx
+#
+#    #pmt data
+#    flash = match_input.flash_v[idx]
+#    flash_idx = match_input.flash_v[idx].idx
+#
+#    data = []
+#    store = np.array([[
+#        idx,
+#        flash.idx,
+#        qcluster.idx,
+#        raw_qcluster.xmin,
+#        raw_qcluster.xmax,
+#        qcluster.xmin,
+#        qcluster.xmax,
+#        qcluster.sum(),
+#        qcluster.length(),
+#        qcluster.time_true,
+#        flash.sum(),
+#        flash.time,
+#        flash.time_true,
+#        flash.dt_prev,
+#        flash.dt_next
+#    ]])
+#    data.append(store)
+#    np_idx = np.concatenate(data, axis=0)
+#    if np_result is None:
+#        np_result = np_idx
+#    else:
+#        np_result = np.concatenate([np_result,np_idx],axis=0)
 
 def attribute_names():
     return [
@@ -280,4 +280,4 @@ def attribute_names():
         'flash_dt_next',
     ]
 
-np.savetxt('test.csv', np_result, delimiter=',', header=','.join(attribute_names()))
+#np.savetxt('test.csv', np_result, delimiter=',', header=','.join(attribute_names()))
