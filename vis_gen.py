@@ -36,5 +36,5 @@ def make_flash_plot(flash, x=None, **kwargs):
         return scatter_points(pmt_positions[:, [2, 1]], color=pmt_positions[:, -1], dim=2, markersize=15, **kwargs)
     
 def gen_flash_plot():
-    f_graph = make_flash_plot(match_input.flash_v[0].pe_v)
+    f_graph = make_flash_plot(match_input.flash_v[0])
     return f_graph
