@@ -9,6 +9,6 @@ np_result = None
 
 #visualizing
 def gen_plot():
-    print(match_input.qcluster_v[0].qpt_v)
-    q_graph = plot_qcluster(match_input.qcluster_v[0].qpt_v)
+    print(match_input.qcluster_v[1].qpt_v)
+    q_graph = plot_qcluster(match_input.qcluster_v[1].qpt_v)
     return q_graph
