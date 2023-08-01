@@ -14,6 +14,4 @@ def gen_plot():
     return q_graph
 
 go_obj = gen_plot()
-
-fig = px.scatter_3d(go_obj.voxels, x = go_obj.voxels[:, 0], y = go_obj.voxels[:, 1], z = go_obj.voxels[:, 2], color = 'species')
-fig.show()
+go_obj.show()
