@@ -1,5 +1,5 @@
 import numpy as np
-from points import scatter_points
+from .points import scatter_points
 
 
 def plot_flash(toymc, flash, x=None, **kwargs):

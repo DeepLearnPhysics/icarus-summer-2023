@@ -1,13 +1,12 @@
 # largely taken from ToyMC class in pytorch-flashmatch repo
-
 import numpy as np
-from lightpath import LightPath
-from flashalgo import FlashAlgo
-from flashmatch_types import FlashMatchInput, Flash
-from plot import plot_qcluster
+from .algorithm.lightpath import LightPath
+from .algorithm.flashalgo import FlashAlgo
+from .flashmatch_types import FlashMatchInput, Flash, QCluster
+from .plot import plot_qcluster
 import yaml
-from photon_library import PhotonLibrary
-from points import scatter_points
+from .photon_library import PhotonLibrary
+from .points import scatter_points
 
 class DataGen():
 
@@ -15,8 +14,8 @@ class DataGen():
         self.configure()
 
     def configure(self):
-        self.cfg_file = "icarus-summer-2023/flashmatch.cfg"
-        config = yaml.load(open("icarus-summer-2023/flashmatch.cfg"), Loader=yaml.Loader)["ToyMC"]
+        self.cfg_file = "flashmatch.cfg"
+        config = yaml.load(open("flashmatch.cfg"), Loader=yaml.Loader)["ToyMC"]
         self.time_algo = config["TimeAlgo"]
         self.track_algo = config["TrackAlgo"]
         self.periodTPC = config["PeriodTPC"]
@@ -30,12 +29,11 @@ class DataGen():
         if 'NumpySeed' in config:
             np.random.seed(config['NumpySeed'])
 
-        self.detector = yaml.load(open("icarus-summer-2023/detector_specs.yml"), Loader=yaml.Loader)['DetectorSpecs']
+        self.detector = yaml.load(open("detector_specs.yml"), Loader=yaml.Loader)['DetectorSpecs']
         self.plib = PhotonLibrary()
         self.qcluster_algo = LightPath(self.detector, self.cfg_file)
         self.flash_algo = FlashAlgo(self.detector, self.plib, self.cfg_file)
-
-
+        
     def make_flashmatch_inputs(self, num_match=None):
         """
         Make N input pairs for flash matching
@@ -59,35 +57,43 @@ class DataGen():
         # generate flash time and x shift (for reco x position assuming trigger time)
         xt_v = self.gen_xt_shift(len(track_v))
 
-        # Defined allowed x recording regions
+        # Defined allowed x recording regions in "reconstructed x" coordinate (assuming neutrino timing)
         min_tpcx, max_tpcx = [t * self.detector['DriftVelocity'] for t in self.periodTPC]
 
-        # generate flash and qclusters
+        # generate flash and qclusters in 5 steps
         for idx, track in enumerate(track_v):
-            # create raw TPC position and light info
+            
+            # 1. create raw TPC position and light info
             raw_qcluster = self.make_qcluster(track)
             raw_qcluster.idx = idx
-            # Create PMT PE spectrum from raw qcluster
+            
+            # 2. Create PMT PE spectrum from raw qcluster
             flash = self.make_flash(raw_qcluster.qpt_v)
             flash.idx = idx
-            # Apply x shift and set flash time
+            
+            # 3. Apply x shift and set flash time
             ftime, dx = xt_v[idx]
             flash.time = ftime
-            flash.time_true = ftime
+            flash.time_true = ftime            
             qcluster = raw_qcluster.shift(dx)
             qcluster.idx = idx
             qcluster.time_true = ftime
             raw_qcluster.time_true = ftime
-            # Drop qcluster points that are outside the recording range
+            
+            # 4. Drop qcluster points that are outside the recording range
             if self.truncate_tpc:
                 qcluster.drop(min_tpcx, max_tpcx)
-            # check for orphan
+                
+            # 5. check for orphan
             valid_match = len(qcluster) > 0 and flash.sum() > 0
+            
             if len(qcluster) > 0:
                 result.qcluster_v.append(qcluster)
                 result.raw_qcluster_v.append(raw_qcluster)
+                
             if flash.sum() > 0:
                 result.flash_v.append(flash)
+                
             if valid_match:
                 result.true_match.append((idx,idx))
 
@@ -174,11 +180,10 @@ class DataGen():
         Returns
             a qcluster instance 
         """
-        qcluster_algo = LightPath(self.detector, cfg_file=None)
         #ly_variation = 0.0
         #posx_variation = 0.0
 
-        qcluster = qcluster_algo.make_qcluster_from_track(track)
+        qcluster = self.qcluster_algo.make_qcluster_from_track(track)
         # apply variation if needed
         if self.ly_variation > 0:
             var = abs(np.random.normal(1.0, self.ly_variation, len(qcluster)))
@@ -199,8 +204,11 @@ class DataGen():
         Returns
             a flash instance 
         """
+        qpt_v = qcluster
+        if type(qcluster) == type(QCluster()):
+            qpt_v = qcluster.qpt_v
         flash = Flash()
-        flash.pe_v = self.flash_algo.fill_estimate(qcluster)
+        flash.pe_v = self.flash_algo.fill_estimate(qpt_v)
         # apply variation if needed
         var = np.ones(shape=(len(flash)),dtype=np.float32)
         if self.pe_variation>0.:

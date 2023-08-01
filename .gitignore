@@ -1,0 +1,7 @@
+*__pycache__
+*ipynb_checkpoints
+*ipynb
+*~
+*.csv
+*_skbuild
+*egg-info
