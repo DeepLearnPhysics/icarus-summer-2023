@@ -273,12 +273,3 @@ def attribute_names():
     ]
 
 np.savetxt('test.csv', np_result, delimiter=',', header=','.join(attribute_names()))
-
-#visualizing
-def gen_plot():
-    print(match_input.qcluster_v[0].qpt_v)
-    print(match_input.qcluster_v[1].qpt_v.size())
-    q_graph = plot_qcluster(match_input.qcluster_v[0].qpt_v)
-    return q_graph
-
-gen_plot()
