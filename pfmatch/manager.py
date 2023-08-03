@@ -5,6 +5,7 @@ import time
 import numpy as np
 from .data_gen import DataGen
 from .flashmatch_types import FlashMatch
+from .algorithm.flashalgo import FlashAlgo
 from .algorithm.match_model import GradientModel, PoissonMatchLoss, EarlyStopping
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -40,6 +41,7 @@ class Manager():
         self.stopping_patience = config['StoppingPatience']
         self.stopping_delta = config['StoppingDelta']
         self.max_iteration = int(config['MaxIteration'])
+        self.flash_algo = FlashAlgo(self.det_cfg, photon_library, self.flash_cfg)
 
     def make_flashmatch_inputs(self):
         gen = DataGen(self.det_cfg, self.flash_cfg)
