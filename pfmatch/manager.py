@@ -14,7 +14,7 @@ class Manager():
 
     def configure(self, detector_cfg, flashmatch_cfg, photon_library):
         config = yaml.load(open(flashmatch_cfg), Loader=yaml.Loader)['FlashMatchManager']
-        self.detector_specs = yaml.load(open(flashmatch_cfg), Loader=yaml.Loader)['DetectorSpecs']
+        self.detector_specs = yaml.load(open(detector_cfg), Loader=yaml.Loader)['DetectorSpecs']
         self.det_cfg = yaml.load(open(detector_cfg), Loader=yaml.Loader)
         self.flash_cfg = yaml.load(open(flashmatch_cfg), Loader=yaml.Loader)
 
