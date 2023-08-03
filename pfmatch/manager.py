@@ -5,7 +5,7 @@ import time
 import numpy as np
 from .data_gen import DataGen
 from .flashmatch_types import FlashMatch
-from algorithm.match_model import GradientModel, PoissonMatchLoss, EarlyStopping
+from .algorithm.match_model import GradientModel, PoissonMatchLoss, EarlyStopping
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 class Manager():
