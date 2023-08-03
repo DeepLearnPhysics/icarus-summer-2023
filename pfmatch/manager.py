@@ -28,6 +28,7 @@ class Manager():
         self.time_shift = config['BeamTimeShift']
         self.touching_track_window = config['TouchingTrackWindow']
         self.offset = config['Offset']
+        self.num_processes = config['NumProcesses']
 
         #for train method
         self.init_lr = config['InitLearningRate']
