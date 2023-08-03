@@ -30,6 +30,9 @@ class Manager():
         self.offset = config['Offset']
         self.num_processes = config['NumProcesses']
 
+        self.exp_frac_v = config['PhotonDecayFractions']
+        self.exp_tau_v = config['PhotonDecayTimes']
+
         #for train method
         self.init_lr = config['InitLearningRate']
         self.min_lr = config['MinLearningRate']
