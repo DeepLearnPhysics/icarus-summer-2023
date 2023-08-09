@@ -44,6 +44,7 @@ class Manager():
         self.stopping_patience = config['StoppingPatience']
         self.stopping_delta = config['StoppingDelta']
         self.max_iteration = int(config['MaxIteration'])
+        self.loss_threshold = config['LossThreshold']
         self.flash_algo = FlashAlgo(self.detector_specs, self.photon_library)
         self.loss_fn = PoissonMatchLoss()
 
