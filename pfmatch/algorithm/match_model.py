@@ -10,11 +10,11 @@ class GradientModel(torch.nn.Module):
         super(GradientModel, self).__init__()
         self.xshift = XShift(dx0, dx_min, dx_max)
         self.flash_algo = flash_algo
-        if flash_algo.siren_path:
+        #if flash_algo.siren_path:
             #self.genflash = SirenFlash(flash_algo)
-            pass
-        else:
-            self.genflash = GenFlash.apply
+            #pass
+        #else:
+        self.genflash = GenFlash.apply
 
     def forward(self, input):
         x = self.xshift(input)
