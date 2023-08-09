@@ -6,6 +6,7 @@ import numpy as np
 from .data_gen import DataGen
 from .flashmatch_types import FlashMatch
 from .algorithm.flashalgo import FlashAlgo
+from photon_library import PhotonLibrary
 from .algorithm.match_model import GradientModel, PoissonMatchLoss, EarlyStopping
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -20,6 +21,8 @@ class Manager():
         self.det_cfg = detector_cfg
         #self.flash_cfg = yaml.load(open(flashmatch_cfg), Loader=yaml.Loader)
         self.flash_cfg = flashmatch_cfg
+
+        self.photon_library = PhotonLibrary()
 
         #for calculate_dx0 method
         self.vol_xmin = self.detector_specs["ActiveVolumeMin"][0]
