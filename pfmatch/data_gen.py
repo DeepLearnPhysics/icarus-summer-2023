@@ -98,7 +98,6 @@ class DataGen():
             if valid_match:
                 result.true_match.append((idx,idx))
 
-        print(result.true_match)
         return result
 
     def gen_trajectories(self, num_tracks):
