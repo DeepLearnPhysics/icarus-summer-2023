@@ -44,7 +44,7 @@ class Manager():
         self.stopping_patience = config['StoppingPatience']
         self.stopping_delta = config['StoppingDelta']
         self.max_iteration = int(config['MaxIteration'])
-        self.flash_algo = FlashAlgo(self.detector_specs, photon_library)
+        self.flash_algo = FlashAlgo(self.detector_specs, self.photon_library)
 
     def make_flashmatch_inputs(self):
         gen = DataGen(self.det_cfg, self.flash_cfg)
