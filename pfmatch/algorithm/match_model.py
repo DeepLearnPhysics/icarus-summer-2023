@@ -18,10 +18,10 @@ class GradientModel(torch.nn.Module):
 
     def forward(self, input):
         x = self.xshift(input)
-        if self.flash_algo.siren_path:
-            flash = self.genflash(x)
-        else:
-            flash = self.genflash(x, self.flash_algo)
+        # if self.flash_algo.siren_path:
+        #     flash = self.genflash(x)
+        # else:
+        flash = self.genflash(x, self.flash_algo)
         return flash
     
 class PoissonMatchLoss(nn.Module):
