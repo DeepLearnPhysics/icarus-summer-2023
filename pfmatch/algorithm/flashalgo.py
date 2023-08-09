@@ -3,7 +3,7 @@ import yaml
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 class FlashAlgo():
-    def __init__(self, detector_specs, photon_library=None, cfg_file=None):
+    def __init__(self, detector_specs, photon_library, cfg_file=None):
         self.plib = photon_library
         self.global_qe = 0.0093
         self.reco_pe_calib = 1
