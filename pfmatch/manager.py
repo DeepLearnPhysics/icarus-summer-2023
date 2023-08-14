@@ -22,7 +22,7 @@ class Manager():
         #self.flash_cfg = yaml.load(open(flashmatch_cfg), Loader=yaml.Loader)
         self.flash_cfg = flashmatch_cfg
 
-        self.photon_library = PhotonLibrary()
+        #self.photon_library = PhotonLibrary()
 
         #for calculate_dx0 method
         self.vol_xmin = self.detector_specs["ActiveVolumeMin"][0]
