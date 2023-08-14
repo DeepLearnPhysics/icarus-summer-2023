@@ -4,7 +4,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import yaml
-from algorithm.siren_modules import Siren
+from ..algorithm.siren_modules import Siren
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 device_ids = list(range(torch.cuda.device_count()))
 
@@ -18,6 +18,8 @@ class SirenLibrary(nn.Module):
         self.model = torch.nn.DataParallel(self.model, device_ids=device_ids)
         self.model.cuda()
         self.model.load_state_dict(torch.load(self.siren_path))
+
+        self.voxel_width = 5
 
     def LoadData(self, transform=True, eps=1e-5):
         '''
@@ -57,7 +59,7 @@ class SirenLibrary(nn.Module):
         #used in flash_algo in "fill_estimate" method
         if not torch.is_tensor(pos):
             pos = torch.tensor(pos, device=device)
-        
+        return self.model(pos)['model_out']
 
     def Visibility(self, vids, ch=None):
         '''
@@ -69,17 +71,23 @@ class SirenLibrary(nn.Module):
         RETURN
           Probability(ies) in FP32 to observe a photon at a specified location for each vid
         '''
-        pass
+        #unclear whether default return of entire array is necessary
+        #take input array of coordinates
+        #return 1D array of visibilities at those coordinates
+        result = []
+        for vid in vids:
+            result += self.VisibilityFromXYZ(vid)
+        return result
 
-    def AxisID2VoxID(self, axis_id):
-        '''
-        Takes an integer ID for voxels along xyz axis (ix, iy, iz) and converts to a voxel ID
-        INPUT
-          axis_id - Length 3 integer array noting the position in discretized index along xyz axis
-        RETURN
-          The voxel ID (single integer)          
-        '''
-        pass
+    # def AxisID2VoxID(self, axis_id):
+    #     '''
+    #     Takes an integer ID for voxels along xyz axis (ix, iy, iz) and converts to a voxel ID
+    #     INPUT
+    #       axis_id - Length 3 integer array noting the position in discretized index along xyz axis
+    #     RETURN
+    #       The voxel ID (single integer)          
+    #     '''
+    #     pass
 
     def AxisID2Position(self, axis_id):
         '''
