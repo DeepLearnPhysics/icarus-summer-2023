@@ -1,7 +1,7 @@
 import torch
 from torch.autograd import grad
 import torch.nn as nn
-#from .siren_modules import Siren
+from .siren_modules import Siren
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 device_ids = list(range(torch.cuda.device_count()))
 
@@ -41,23 +41,23 @@ class GenFlash(torch.autograd.Function):
         pad = torch.zeros(grad_input.shape[0], 3, device=device)
         return torch.cat((grad_input, pad), -1), None
         
-# class SirenFlash(nn.Module):
-#     def __init__(self, flash_algo, in_features=3, hidden_features=512, hidden_layers=5, out_features=180, outermost_linear=True, omega=30):
-#         super().__init__()
-#         self.flash_algo = flash_algo
-#         self.model = Siren(in_features, hidden_features, hidden_layers, out_features, outermost_linear, omega)
-#         self.model = self.model.float()
-#         self.model = torch.nn.DataParallel(self.model, device_ids=device_ids)
-#         self.model.cuda()
-#         self.model.load_state_dict(torch.load(flash_algo.siren_path))
-# #         for param in self.model.parameters():
-# #             param.requires_grad = False
+class SirenFlash(nn.Module):
+    def __init__(self, flash_algo, in_features=3, hidden_features=512, hidden_layers=5, out_features=180, outermost_linear=True, omega=30):
+        super().__init__()
+        self.flash_algo = flash_algo
+        self.model = Siren(in_features, hidden_features, hidden_layers, out_features, outermost_linear, omega)
+        self.model = self.model.float()
+        self.model = torch.nn.DataParallel(self.model, device_ids=device_ids)
+        self.model.cuda()
+        self.model.load_state_dict(torch.load(flash_algo.siren_path))
+#         for param in self.model.parameters():
+#             param.requires_grad = False
 
-#     def forward(self, input):
-#         coord = self.flash_algo.NormalizePosition(input[:, :3])
-#         pred = self.model(coord)['model_out']
-#         pred = torch.clip(self.flash_algo.plib.DataTransformInv(pred), 0.0, 1.0)
-#         local_pe_v = torch.sum(pred*(input[:, 3].unsqueeze(-1)), axis = 0)
-#         if len(self.flash_algo.qe_v) == 0:
-#             self.flash_algo.qe_v = torch.ones(local_pe_v.shape, device=device)
-#         return local_pe_v * self.flash_algo.global_qe * self.flash_algo.reco_pe_calib / self.flash_algo.qe_v
+    def forward(self, input):
+        coord = self.flash_algo.NormalizePosition(input[:, :3])
+        pred = self.model(coord)['model_out']
+        pred = torch.clip(self.flash_algo.plib.DataTransformInv(pred), 0.0, 1.0)
+        local_pe_v = torch.sum(pred*(input[:, 3].unsqueeze(-1)), axis = 0)
+        if len(self.flash_algo.qe_v) == 0:
+            self.flash_algo.qe_v = torch.ones(local_pe_v.shape, device=device)
+        return local_pe_v * self.flash_algo.global_qe * self.flash_algo.reco_pe_calib / self.flash_algo.qe_v

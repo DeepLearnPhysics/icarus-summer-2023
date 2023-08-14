@@ -11,10 +11,10 @@ from .points import scatter_points
 class DataGen():
     #TODO: Modify to work with photon library or siren input for visibility
 
-    def __init__(self,yml_detector,yml_match):
-        self.configure(yml_detector,yml_match)
+    def __init__(self,yml_detector,yml_match, photon_lib=None):
+        self.configure(yml_detector,yml_match, photon_lib)
 
-    def configure(self,yml_detector,yml_match):
+    def configure(self,yml_detector,yml_match, photon_lib):
         self.cfg_file = yml_match
         config = yaml.load(open(self.cfg_file), Loader=yaml.Loader)["ToyMC"]
         self.time_algo = config["TimeAlgo"]
@@ -31,7 +31,8 @@ class DataGen():
             np.random.seed(config['NumpySeed'])
 
         self.detector = yaml.load(open(yml_detector), Loader=yaml.Loader)['DetectorSpecs']
-        self.plib = PhotonLibrary()
+        #self.plib = PhotonLibrary()
+        self.plib = photon_lib
         self.qcluster_algo = LightPath(self.detector, self.cfg_file)
         self.flash_algo = FlashAlgo(self.detector, self.plib, self.cfg_file)
         
