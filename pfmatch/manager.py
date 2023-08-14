@@ -23,6 +23,7 @@ class Manager():
         self.flash_cfg = flashmatch_cfg
 
         #self.photon_library = PhotonLibrary()
+        self.photon_library = photon_library
 
         #for calculate_dx0 method
         self.vol_xmin = self.detector_specs["ActiveVolumeMin"][0]
