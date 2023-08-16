@@ -11,7 +11,7 @@ from .points import scatter_points
 class DataGen():
     #TODO: Modify to work with photon library or siren input for visibility
 
-    def __init__(self,yml_detector,yml_match, photon_lib=None):
+    def __init__(self,yml_detector,yml_match, photon_lib):
         self.configure(yml_detector,yml_match, photon_lib)
 
     def configure(self,yml_detector,yml_match, photon_lib):

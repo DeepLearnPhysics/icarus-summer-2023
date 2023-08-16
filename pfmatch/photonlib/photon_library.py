@@ -9,9 +9,10 @@ class PhotonLibrary(object):
         if not os.path.isfile(fname):
             print('Downloading photon library file... (>300MByte, may take minutes')
             os.system('curl -O https://www.nevis.columbia.edu/~kazuhiro/plib.h5 ./')
-        if not os.path.isfile(fname):
-            print('Error: failed to download the photon library file...')
-            raise Exception
+            fname = 'plib.h5'
+        # if not os.path.isfile(fname):
+        #     print('Error: failed to download the photon library file...')
+        #     raise Exception
 
         with h5.File(fname,'r') as f:
             self._vis  = torch.from_numpy(np.array(f['vis'], dtype=np.float32)).to(device)

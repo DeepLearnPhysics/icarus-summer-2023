@@ -1,4 +1,6 @@
+*.h5
 *__pycache__
+*.pfmatch.photonlib.__pycache__
 *ipynb_checkpoints
 *ipynb
 *~

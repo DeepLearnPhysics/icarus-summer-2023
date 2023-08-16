@@ -47,7 +47,8 @@ class FlashAlgo():
 
         #fill estimate
         if self.use_siren:
-          local_pe_v = torch.sum(self.slib.VisibilityFromXYZ(track[:, :3])*(track[:, 3].unsqueeze(-1)), axis = 0)
+          #local_pe_v = torch.sum(self.slib.VisibilityFromXYZ(track[:, :3])*(track[:, 3].unsqueeze(-1)), axis = 0)
+          pass
         else:
           local_pe_v = torch.sum(self.plib.VisibilityFromXYZ(track[:, :3])*(track[:, 3].unsqueeze(-1)), axis = 0)
 
@@ -68,10 +69,11 @@ class FlashAlgo():
         
         if self.use_siren:
           #neighboring voxel vis values - track voxel vis values / distance btwn voxel pairs
-          neighbor_track = track[:, :3]
-          neighbor_track[:, 0] += self.slib.voxel_width
+          # neighbor_track = track[:, :3]
+          # neighbor_track[:, 0] += self.slib.voxel_width
 
-          grad = (self.slib.Visibility(neighbor_track) - self.slib.Visibility(track[:, :3])) / self.slib.voxel_width
+          # grad = (self.slib.Visibility(neighbor_track) - self.slib.Visibility(track[:, :3])) / self.slib.voxel_width
+          pass
 
         else:
           vids = self.plib.Position2VoxID(track[:, :3])
