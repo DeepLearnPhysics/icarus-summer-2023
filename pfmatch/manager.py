@@ -6,7 +6,7 @@ import numpy as np
 from .data_gen import DataGen
 from .flashmatch_types import FlashMatch
 from .algorithm.flashalgo import FlashAlgo
-from .photon_library import PhotonLibrary
+from .photonlib.photon_library import PhotonLibrary
 from .algorithm.match_model import GradientModel, PoissonMatchLoss, EarlyStopping
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
