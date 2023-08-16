@@ -5,7 +5,7 @@ from .algorithm.flashalgo import FlashAlgo
 from .flashmatch_types import FlashMatchInput, Flash, QCluster
 from .plot import plot_qcluster
 import yaml
-from .photon_library import PhotonLibrary
+from .photonlib.photon_library import PhotonLibrary
 from .points import scatter_points
 
 class DataGen():
