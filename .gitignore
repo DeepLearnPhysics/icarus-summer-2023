@@ -1,3 +1,5 @@
+.ipynb_checkpoints*
+*checkpoint.py
 *.h5
 *__pycache__
 *.pfmatch.photonlib.__pycache__

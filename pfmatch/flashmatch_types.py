@@ -105,7 +105,7 @@ class Flash:
 
 class QCluster:
     def __init__(self, *args):
-        self.qpt_v = [] #I THINK: vector of 3D points along track, along with photons "q" originating from each position
+        self.qpt_v = None #I THINK: vector of 3D points along track, along with photons "q" originating from each position
         self.idx = np.inf # index from original larlite vector
         self.time = np.inf # assumed time w.r.t trigger for reconstruction
         self.time_true = np.inf # time from MCTrack information
