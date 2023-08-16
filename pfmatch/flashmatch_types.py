@@ -3,7 +3,8 @@ import numpy as np
 import copy
 import torch
 from scipy.optimize import linear_sum_assignment
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+#device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device("cpu")
 
 class FlashMatchInput:
     def __init__(self):
@@ -151,7 +152,7 @@ class QCluster:
         other.xmax += dx
         return other
 
-    # fill qucluster content from a qcluster_v list
+    # fill qcluster content from a qcluster_v list
     def fill(self, qpt_v):
         self.qpt_v = torch.tensor(qpt_v, device=device)
         self.xmin = torch.min(self.qpt_v[:, 0]).item()
