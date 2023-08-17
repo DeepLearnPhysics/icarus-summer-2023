@@ -55,8 +55,10 @@ class LightPath():
                 q = self.light_yield * self.dEdxMIP * weight
                 qpt_v.append([mid_pt[0], mid_pt[1], mid_pt[2], q])
 
-        res.fill(qpt_v)
-        res.qpt_v = torch.concat([res.qpt_v,torch.Tensor(qpt_v)])
+        if res.qpt_v is None:
+            res.qpt_v = torch.Tensor(qpt_v)
+        else:
+            res.qpt_v = torch.concat([res.qpt_v,torch.Tensor(qpt_v)])
         
     def make_qcluster_from_track(self, track):
         """

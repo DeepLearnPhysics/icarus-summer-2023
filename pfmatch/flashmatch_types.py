@@ -148,15 +148,15 @@ class QCluster:
     def shift(self, dx):
         other = copy.deepcopy(self)
         other.qpt_v[:, 0] += dx
-        other.xmin += dx
-        other.xmax += dx
+        #other.xmin += dx
+        #other.xmax += dx
         return other
 
     # fill qcluster content from a qcluster_v list
     def fill(self, qpt_v):
         self.qpt_v = torch.tensor(qpt_v, device=device)
-        self.xmin = torch.min(self.qpt_v[:, 0]).item()
-        self.xmax = torch.max(self.qpt_v[:, 0]).item()
+        #self.xmin = torch.min(self.qpt_v[:, 0]).item()
+        #self.xmax = torch.max(self.qpt_v[:, 0]).item()
 
     # drop points outside specified recording range
     def drop(self, x_min, x_max, y_min = -np.inf, y_max = np.inf, z_min = -np.inf, z_max = np.inf):
