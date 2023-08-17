@@ -1,8 +1,8 @@
 import torch
 import yaml
 from ..photonlib.siren_alt import SirenLibrary
-#device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-device = torch.device("cpu")
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+#device = torch.device("cpu")
 
 class FlashAlgo():
     def __init__(self, detector_specs, photon_library, cfg_file):
@@ -16,8 +16,12 @@ class FlashAlgo():
         if cfg_file:
           self.configure(cfg_file)
 
-    def configure(self, cfg_file):
-        config = yaml.load(open(cfg_file), Loader=yaml.Loader)["PhotonLibHypothesis"]
+    def configure_from_yaml(self, fmatch_yaml):
+        self.configure(yaml.load(open(cfg_file), Loader=yaml.Loader)["LightPath"])
+
+        
+    def configure(self, fmatch_config):
+        config = fmatch_config['PhotonLibHypothesis']
         self.global_qe = config["GlobalQE"]
         self.reco_pe_calib = config["RecoPECalibFactor"]
         self.qe_v = torch.tensor(config["CCVCorrection"], device=device)
@@ -43,8 +47,8 @@ class FlashAlgo():
         Returns
           a hypothesis Flash object
         """
-        if not torch.is_tensor(track):
-          track = torch.tensor(track, device=device)
+        #if not torch.is_tensor(track):
+        #  track = torch.tensor(track, device=device)
 
         #fill estimate
         if self.use_siren:

@@ -7,34 +7,39 @@ from .plot import plot_qcluster
 import yaml
 from .photonlib.photon_library import PhotonLibrary
 from .points import scatter_points
+import torch
 
 class DataGen():
     #TODO: Modify to work with photon library or siren input for visibility
 
-    def __init__(self,yml_detector,yml_match, photon_lib):
-        self.configure(yml_detector,yml_match, photon_lib)
+    def __init__(self,detector_cfg, match_cfg, photon_lib):
+        self.configure(detector_cfg, match_cfg, photon_lib)
+        
+    def configure_from_yaml(self, detector_yml, match_yml, photon_lib):
+        fmatch_cfg   = yaml.load(open(match_yml),    Loader=yaml.Loader)
+        detector_cfg = yaml.load(open(detector_yml), Loader=yaml.Loader)['DetectorSpecs']
+        self.configure(detector_cfg, fmatch_cfg, photon_lib)
+        
+    def configure(self,detector_cfg, fmatch_cfg, photon_lib):
+        
+        gen_cfg = fmatch_cfg['ToyMC']
+        self.time_algo  = gen_cfg["TimeAlgo"]
+        self.track_algo = gen_cfg["TrackAlgo"]
+        self.periodTPC  = gen_cfg["PeriodTPC"]
+        self.periodPMT  = gen_cfg["PeriodPMT"]
+        self.ly_variation = gen_cfg["LightYieldVariation"]
+        self.pe_variation = gen_cfg["PEVariation"]
+        self.posx_variation = gen_cfg['PosXVariation']
+        self.truncate_tpc = gen_cfg["TruncateTPC"]
+        self.num_tracks = gen_cfg["NumTracks"]
 
-    def configure(self,yml_detector,yml_match, photon_lib):
-        self.cfg_file = yml_match
-        config = yaml.load(open(self.cfg_file), Loader=yaml.Loader)["ToyMC"]
-        self.time_algo = config["TimeAlgo"]
-        self.track_algo = config["TrackAlgo"]
-        self.periodTPC = config["PeriodTPC"]
-        self.periodPMT = config["PeriodPMT"]
-        self.ly_variation = config["LightYieldVariation"]
-        self.pe_variation = config["PEVariation"]
-        self.posx_variation = config['PosXVariation']
-        self.truncate_tpc = config["TruncateTPC"]
-        self.num_tracks = config["NumTracks"]
+        if 'NumpySeed' in gen_cfg:
+            np.random.seed(gen_cfg['NumpySeed'])
 
-        if 'NumpySeed' in config:
-            np.random.seed(config['NumpySeed'])
-
-        self.detector = yaml.load(open(yml_detector), Loader=yaml.Loader)['DetectorSpecs']
-        #self.plib = PhotonLibrary()
+        self.detector = detector_cfg
         self.plib = photon_lib
-        self.qcluster_algo = LightPath(self.detector, self.cfg_file)
-        self.flash_algo = FlashAlgo(self.detector, self.plib, self.cfg_file)
+        self.qcluster_algo = LightPath(self.detector, fmatch_cfg)
+        self.flash_algo = FlashAlgo(self.detector, self.plib, fmatch_cfg)
         
     def make_flashmatch_inputs(self, num_match=None):
         """
@@ -208,17 +213,21 @@ class DataGen():
         qpt_v = qcluster
         if type(qcluster) == type(QCluster()):
             qpt_v = qcluster.qpt_v
-        flash = Flash()
-        flash.pe_v = self.flash_algo.fill_estimate(qpt_v)
-        # apply variation if needed
-        var = np.ones(shape=(len(flash)),dtype=np.float32)
-        if self.pe_variation>0.:
-            var = abs(np.random.normal(1.0, self.pe_variation,len(flash)))
-        for idx in range(len(flash)):
-            estimate = float(int(np.random.poisson(flash.pe_v[idx].item() * var[idx])))
-            flash.pe_v[idx] = estimate
-            flash.pe_err_v.append(np.sqrt(estimate))
 
+        pe_v = self.flash_algo.fill_estimate(qpt_v)
+        pe_err_v = []
+        # apply variation if needed
+        var = np.ones(shape=(len(pe_v)),dtype=np.float32)
+        if self.pe_variation>0.:
+            var = abs(np.random.normal(1.0, self.pe_variation,len(pe_v)))
+        for idx in range(len(pe_v)):
+            estimate = float(int(np.random.poisson(pe_v[idx].item() * var[idx])))
+            pe_v[idx] = estimate
+            pe_err_v.append(np.sqrt(estimate))
+
+        flash = Flash()
+        flash.pe_v = torch.tensor(pe_v,device=pe_v.device)
+        flash.pe_err_v = torch.tensor(pe_err_v,device=pe_v.device)
         return flash
 
 #make_flashmatch_inputs()

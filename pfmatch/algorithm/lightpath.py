@@ -11,9 +11,11 @@ class LightPath():
         if cfg_file:
             self.configure(cfg_file)
 
-    def configure(self, cfg_file):
-        config = yaml.load(open(cfg_file), Loader=yaml.Loader)["LightPath"]
-        self.gap = config["SegmentSize"]
+    def configure_from_yaml(self, cfg_file):
+        self.configure(yaml.load(open(cfg_file), Loader=yaml.Loader)["LightPath"])
+        
+    def configure(self,cfg):
+        self.gap = cfg["LightPath"]["SegmentSize"]
     
     def fill_qcluster(self, pt1, pt2, res):
         """
@@ -26,9 +28,8 @@ class LightPath():
         -------
         Returns
         """
-        import torch
         norm_alg = np.linalg.norm
-        if type(pt1) == type(torch.Tensor()):
+        if type(pt1) == type(torch.tensor([])):
             norm_alg = torch.linalg.norm
             
         qpt_v=[]
@@ -55,10 +56,7 @@ class LightPath():
                 q = self.light_yield * self.dEdxMIP * weight
                 qpt_v.append([mid_pt[0], mid_pt[1], mid_pt[2], q])
 
-        if res.qpt_v is None:
-            res.qpt_v = torch.Tensor(qpt_v)
-        else:
-            res.qpt_v = torch.concat([res.qpt_v,torch.Tensor(qpt_v)])
+        res.qpt_v = torch.concat([res.qpt_v,torch.tensor(qpt_v,device=res.qpt_v.device)])
         
     def make_qcluster_from_track(self, track):
         """
@@ -74,12 +72,16 @@ class LightPath():
         #qpt_v = []
         
         # add first point of trajectory
-        res.qpt_v = torch.Tensor([track[0][0], track[0][1], track[0][2], 0.]).reshape(1,-1)
+        res.qpt_v = torch.tensor([track[0][0], track[0][1], track[0][2], 0.],
+                                 device=res.qpt_v.device,
+                                ).reshape(1,-1)
 
         for i in range(len(track)-1):
             self.fill_qcluster(np.array(track[i]), np.array(track[i+1]), res)
 
         # add last point of trajectory
-        res.qpt_v = torch.concat([res.qpt_v, torch.Tensor([track[-1][0], track[-1][1], track[-1][2], 0.]).reshape(1,-1)])
+        res.qpt_v = torch.concat([res.qpt_v, torch.tensor([track[-1][0], track[-1][1], track[-1][2], 0.], 
+                                                          device=res.qpt_v.device,
+                                                         ).reshape(1,-1)])
 
         return res

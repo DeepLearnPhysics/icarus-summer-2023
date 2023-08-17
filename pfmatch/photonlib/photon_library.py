@@ -2,8 +2,8 @@ import h5py  as h5
 import numpy as np
 import os
 import torch
-#device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-device = torch.device("cpu")
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+#device = torch.device("cpu")
 
 class PhotonLibrary(object):
     def __init__(self, fname='photon_library/plib_combined.h5', lut_file=None):
@@ -83,8 +83,8 @@ class PhotonLibrary(object):
         return self.Visibility(self.AxisID2VoxID(axis_id),ch)
 
     def VisibilityFromXYZ(self, pos, ch=None):
-        if not torch.is_tensor(pos):
-            pos = torch.tensor(pos, device=device)
+        #if not torch.is_tensor(pos):
+        #    pos = torch.tensor(pos, device=device)
         return self.Visibility(self.Position2VoxID(pos), ch)
 
     def Visibility(self, vids, ch=None):

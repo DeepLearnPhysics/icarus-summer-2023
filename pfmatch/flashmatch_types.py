@@ -3,8 +3,8 @@ import numpy as np
 import copy
 import torch
 from scipy.optimize import linear_sum_assignment
-#device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-device = torch.device("cpu")
+DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+#DEVICE = torch.device("cpu")
 
 class FlashMatchInput:
     def __init__(self):
@@ -82,22 +82,16 @@ class FlashMatch:
 
 class Flash:
     def __init__(self, *args):
-        self.pe_v = []
-        self.pe_true_v = []
-        self.pe_err_v = []
+        self.pe_v = torch.tensor([],device=DEVICE)
+        self.pe_err = torch.tensor([],device=DEVICE)
+        self.pe_true_v = torch.tensor([],device=DEVICE)
         self.idx = np.inf    # index from original larlite vector
         self.time = np.inf   # Flash timing, a candidate T0
         self.time_true = np.inf  # MCFlash timing
         self.time_width = np.inf # flash time integration window
-        self.dt_next = np.inf   # dt to next flash
-        self.dt_prev = np.inf   # dt to previous flash
 
     def __len__(self):
         return len(self.pe_v)
-
-    def to_torch(self):
-        self.pe_v = torch.tensor(self.pe_v, device=device)
-        self.pe_true_v = torch.tensor(self.pe_true_v, device=device)
 
     def sum(self):
         if len(self.pe_v) == 0:
@@ -106,7 +100,7 @@ class Flash:
 
 class QCluster:
     def __init__(self, *args):
-        self.qpt_v = None #I THINK: vector of 3D points along track, along with photons "q" originating from each position
+        self.qpt_v = torch.tensor([],device=DEVICE) #I THINK: vector of 3D points along track, along with photons "q" originating from each position
         self.idx = np.inf # index from original larlite vector
         self.time = np.inf # assumed time w.r.t trigger for reconstruction
         self.time_true = np.inf # time from MCTrack information
@@ -154,7 +148,7 @@ class QCluster:
 
     # fill qcluster content from a qcluster_v list
     def fill(self, qpt_v):
-        self.qpt_v = torch.tensor(qpt_v, device=device)
+        self.qpt_v = torch.tensor(qpt_v, device=DEVICE)
         #self.xmin = torch.min(self.qpt_v[:, 0]).item()
         #self.xmax = torch.max(self.qpt_v[:, 0]).item()
 
