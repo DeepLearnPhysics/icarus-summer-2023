@@ -2,10 +2,10 @@ import torch
 from torch.autograd import grad
 import torch.nn as nn
 from .siren_modules import Siren
-#device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-#device_ids = list(range(torch.cuda.device_count()))
-device = torch.device("cpu")
-device_ids = [torch.device("cpu")]
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device_ids = list(range(torch.cuda.device_count()))
+# device = torch.device("cpu")
+# device_ids = [torch.device("cpu")]
 
 class XShift(nn.Module):
     """

@@ -15,9 +15,10 @@ class FlashAlgo():
         self.vol_max = torch.tensor(detector_specs["ActiveVolumeMax"], device=device)
         if cfg_file:
           self.configure(cfg_file)
+        self.cfg_file = cfg_file
 
     def configure_from_yaml(self, fmatch_yaml):
-        self.configure(yaml.load(open(cfg_file), Loader=yaml.Loader)["LightPath"])
+        self.configure(yaml.load(open(self.cfg_file), Loader=yaml.Loader)["LightPath"])
 
         
     def configure(self, fmatch_config):
