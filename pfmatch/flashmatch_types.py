@@ -83,7 +83,7 @@ class FlashMatch:
 class Flash:
     def __init__(self, *args):
         self.pe_v = torch.tensor([],device=DEVICE)
-        self.pe_err = torch.tensor([],device=DEVICE)
+        self.pe_err_v = torch.tensor([],device=DEVICE)
         self.pe_true_v = torch.tensor([],device=DEVICE)
         self.idx = np.inf    # index from original larlite vector
         self.time = np.inf   # Flash timing, a candidate T0
@@ -97,6 +97,9 @@ class Flash:
         if len(self.pe_v) == 0:
             return 0
         return torch.sum(self.pe_v).item()
+    
+    def fill(self,pe_v):
+        self.pe_v = torch.tensor(pe_v,device=DEVICE)
 
 class QCluster:
     def __init__(self, *args):
@@ -104,7 +107,6 @@ class QCluster:
         self.idx = np.inf # index from original larlite vector
         self.time = np.inf # assumed time w.r.t trigger for reconstruction
         self.time_true = np.inf # time from MCTrack information
-        self.xshift = 0
 
     def __len__(self):
         return len(self.qpt_v)
@@ -142,15 +144,11 @@ class QCluster:
     def shift(self, dx):
         other = copy.deepcopy(self)
         other.qpt_v[:, 0] += dx
-        #other.xmin += dx
-        #other.xmax += dx
         return other
 
     # fill qcluster content from a qcluster_v list
     def fill(self, qpt_v):
         self.qpt_v = torch.tensor(qpt_v, device=DEVICE)
-        #self.xmin = torch.min(self.qpt_v[:, 0]).item()
-        #self.xmax = torch.max(self.qpt_v[:, 0]).item()
 
     # drop points outside specified recording range
     def drop(self, x_min, x_max, y_min = -np.inf, y_max = np.inf, z_min = -np.inf, z_max = np.inf):

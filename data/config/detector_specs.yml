@@ -2,6 +2,9 @@ DetectorSpecs:
   LightYield: 24000
   MIPdEdx: 2.2
   DriftVelocity: 0.153812
+  # Cryostat 0
+  MinPosition: [-410.43,-233.61,-1003.95]
+  MaxPosition: [ -10.,   193.21, 1003.95]
   # TPC0
   MinPosition_TPC0: [-358.49,-181.86,-894.951]
   MaxPosition_TPC0: [-210.29,134.96,894.951]
