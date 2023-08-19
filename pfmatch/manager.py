@@ -165,10 +165,13 @@ class Manager():
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, min_lr=self.min_lr, factor=self.scheduler_factor)
         early_stopping = EarlyStopping(self.stopping_patience, self.stopping_delta)
 
+        loss_v, x_v = [], []
         start = time.time()
         for i in range(self.max_iteration):
             pred = model(input)
             loss = self.loss_fn(pred, target)
+            loss_v.append(loss.item())
+            x_v.append(model.x)
 
             optimizer.zero_grad()
             loss.backward()
@@ -176,9 +179,9 @@ class Manager():
             scheduler.step(loss)
             early_stopping(loss)
 
-            if loss > self.loss_threshold or early_stopping.early_stop:
-                break
+            # if loss > self.loss_threshold or early_stopping.early_stop:
+            #     break
 
         end = time.time()
 
-        return loss.item(), model.xshift.dx.item(), torch.sum(pred).item(), end-start
+        return loss.item(), model.xshift.dx.item(), torch.sum(pred).item(), end-start, loss_v, x_v
