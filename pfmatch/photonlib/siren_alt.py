@@ -16,9 +16,10 @@ class SirenLibrary(nn.Module):
         self.model = Siren(in_features, hidden_features, hidden_layers, out_features, outermost_linear, omega)
         self.model = self.model.float()
         self.model = torch.nn.DataParallel(self.model, device_ids=device_ids)
+        print(self.model)
         self.model.cuda()
         self.model.load_state_dict(torch.load(self.siren_path))
-
+        
         self.voxel_width = 5
 
     def LoadData(self, transform=True, eps=1e-5):

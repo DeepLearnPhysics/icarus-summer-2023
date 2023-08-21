@@ -6,8 +6,11 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 class FlashAlgo():
     def __init__(self, detector_specs, photon_library, cfg_file):
-        self.plib = photon_library
-        #self.slib = SirenLibrary(cfg_file)
+        self.plib = photon_library #same photon library that was passed in DataGen, will be None unless user changes
+
+        if not self.plib:
+          self.slib = SirenLibrary(cfg_file)
+          
         self.global_qe = 0.0093
         self.reco_pe_calib = 1
         self.qe_v = []  # CCVCorrection factor array
@@ -27,7 +30,6 @@ class FlashAlgo():
         self.reco_pe_calib = config["RecoPECalibFactor"]
         self.qe_v = torch.tensor(config["CCVCorrection"], device=device)
         self.siren_path = config["SirenPath"]
-        self.use_siren = config["UseSiren"]
         if not self.siren_path and not self.plib:
           print("Must provide either a photon library file or Siren model path")
           raise Exception
@@ -36,7 +38,8 @@ class FlashAlgo():
         '''
         Convert position in world coordinate to normalized coordinate      
         '''
-        return ((self.plib.Position2AxisID(pos) + 0.5) / self.plib.shape - 0.5) * 2
+        #return ((self.plib.Position2AxisID(pos) + 0.5) / self.plib.shape - 0.5) * 2
+        pass
 
     def fill_estimate(self, track):
         """
@@ -52,7 +55,7 @@ class FlashAlgo():
         #  track = torch.tensor(track, device=device)
 
         #fill estimate
-        if self.use_siren:
+        if not self.plib:
           #local_pe_v = torch.sum(self.slib.VisibilityFromXYZ(track[:, :3])*(track[:, 3].unsqueeze(-1)), axis = 0)
           pass
         else:
@@ -73,7 +76,7 @@ class FlashAlgo():
           gradient value of the fill_estimate step for track
         """
         
-        if self.use_siren:
+        if not self.plib:
           #neighboring voxel vis values - track voxel vis values / distance btwn voxel pairs
           # neighbor_track = track[:, :3]
           # neighbor_track[:, 0] += self.slib.voxel_width

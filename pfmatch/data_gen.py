@@ -5,14 +5,14 @@ from .algorithm.flashalgo import FlashAlgo
 from .flashmatch_types import FlashMatchInput, Flash, QCluster
 from .plot import plot_qcluster
 import yaml
-from .photonlib.photon_library import PhotonLibrary
+#from .photonlib.photon_library import PhotonLibrary
 from .points import scatter_points
 import torch
 
 class DataGen():
     #TODO: Modify to work with photon library or siren input for visibility
 
-    def __init__(self,detector_cfg, match_cfg, photon_lib):
+    def __init__(self,detector_cfg, match_cfg, photon_lib=None):
         self.configure(detector_cfg, match_cfg, photon_lib)
         
     def configure_from_yaml(self, detector_yml, match_yml, photon_lib):

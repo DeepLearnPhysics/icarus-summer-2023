@@ -63,7 +63,7 @@ PhotonLibHypothesis:
     ThresholdExtendTrack: 2.0
     SegmentSize: 0.5
     #SirenPath: 'models/siren_model_5.pth'
-    SirenPath: '/fs/ddn/sdf/home/c/carsmith/siren/version_6/checkpoints/epoch=297-step=11026.ckpt'
+    SirenPath: '/fs/ddn/sdf/home/c/carsmith/siren/version_6/checkpoints/epoch=299-step=11100.ckpt'
     UseSiren: False
 
 LightPath:
