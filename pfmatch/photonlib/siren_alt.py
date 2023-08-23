@@ -7,6 +7,8 @@ import yaml
 from ..algorithm.siren_modules import Siren
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 device_ids = list(range(torch.cuda.device_count()))
+# device = torch.device("cpu")
+# device_ids = [torch.device("cpu")]
 
 class SirenLibrary(nn.Module):
     def __init__(self, cfg_file, in_features=3, hidden_features=512, hidden_layers=5, out_features=180, outermost_linear=True, omega=30):
@@ -16,9 +18,29 @@ class SirenLibrary(nn.Module):
         self.model = Siren(in_features, hidden_features, hidden_layers, out_features, outermost_linear, omega)
         self.model = self.model.float()
         self.model = torch.nn.DataParallel(self.model, device_ids=device_ids)
-        print(self.model)
+
+        checkpoint = torch.load(self.siren_path)
+        state_dict = checkpoint['state_dict']
+
+        #Making adjustments to state_dict to be compatible with model configured in this repo
+        state_dict.pop('siren.scale')
+
+        #Layers 0-5
+        for i in range(0, 6):
+            state_dict['module.net.{}.linear.weight'.format(i)] = state_dict['siren.net.{}.linear.weight'.format(i)]
+            state_dict.pop('siren.net.{}.linear.weight'.format(i))
+            state_dict['module.net.{}.linear.bias'.format(i)] = state_dict['siren.net.{}.linear.bias'.format(i)]
+            state_dict.pop('siren.net.{}.linear.bias'.format(i))
+
+        #7th layer is different for some reason
+        state_dict['module.net.6.weight'] = state_dict['siren.net.6.linear.weight']
+        state_dict.pop('siren.net.6.linear.weight')
+        state_dict['module.net.6.bias'.format(i)] = state_dict['siren.net.6.linear.bias']
+        state_dict.pop('siren.net.6.linear.bias')
+
         self.model.cuda()
-        self.model.load_state_dict(torch.load(self.siren_path))
+
+        self.model.load_state_dict(state_dict)
         
         self.voxel_width = 5
 

@@ -2,7 +2,7 @@ import torch
 import yaml
 from ..photonlib.siren_alt import SirenLibrary
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-#device = torch.device("cpu")
+# device = torch.device("cpu")
 
 class FlashAlgo():
     def __init__(self, detector_specs, photon_library, cfg_file):
