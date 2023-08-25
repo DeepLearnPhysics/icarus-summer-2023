@@ -81,6 +81,7 @@ class SirenLibrary(nn.Module):
 
     def VisibilityFromXYZ(self, pos, ch=None):
         #used in flash_algo in "fill_estimate" method
+        #returns a 1x180 tensor of visibility at xyz from each pmt
         if not torch.is_tensor(pos):
             pos = torch.tensor(pos, device=device)
         return self.model(pos)['model_out']
