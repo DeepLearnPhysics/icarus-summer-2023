@@ -12,7 +12,7 @@ device_ids = list(range(torch.cuda.device_count()))
 # device_ids = [torch.device("cpu")]
 
 class SirenLibrary(nn.Module):
-    def __init__(self, cfg_file, in_features=3, hidden_features=512, hidden_layers=5, out_features=180, outermost_linear=True, omega=30):
+    def __init__(self, cfg_file, in_features=3, hidden_features=512, hidden_layers=5, out_features=180, outermost_linear=False, omega=30):
         config = yaml.load(open(cfg_file), Loader=yaml.Loader)["PhotonLibHypothesis"]
         self.siren_path = config["SirenPath"]
         super().__init__()
@@ -33,10 +33,14 @@ class SirenLibrary(nn.Module):
             state_dict['module.net.{}.linear.bias'.format(i)] = state_dict['siren.net.{}.linear.bias'.format(i)]
             state_dict.pop('siren.net.{}.linear.bias'.format(i))
 
+        for k in state_dict.keys():
+            print(k)
+        print(self.model)
+
         #7th layer is different for some reason
-        state_dict['module.net.6.weight'] = state_dict['siren.net.6.linear.weight']
+        state_dict['module.net.6.linear.weight'] = state_dict['siren.net.6.linear.weight']
         state_dict.pop('siren.net.6.linear.weight')
-        state_dict['module.net.6.bias'.format(i)] = state_dict['siren.net.6.linear.bias']
+        state_dict['module.net.6.linear.bias'.format(i)] = state_dict['siren.net.6.linear.bias']
         state_dict.pop('siren.net.6.linear.bias')
 
         self.model.cuda()
@@ -44,6 +48,19 @@ class SirenLibrary(nn.Module):
         self.model.load_state_dict(state_dict)
         
         self.voxel_width = 5
+
+
+    def inv_transform(self, y, vmax=1, eps=1e-5, sin_out=False, lib=np):
+        y0 = np.log10(eps)
+        y1 = np.log10(vmax + eps)
+
+        if sin_out:
+            y = (y+1)/2
+
+        power = np.power if lib == np else lib.pow
+        #x = 10 ** (y * (y1-y0) + y0) - eps
+        x = power(10., (y * (y1-y0) + y0)) - eps
+        return x
 
     def LoadData(self, transform=True, eps=1e-5):
         '''
@@ -84,7 +101,8 @@ class SirenLibrary(nn.Module):
         #returns a 1x180 tensor of visibility at xyz from each pmt
         if not torch.is_tensor(pos):
             pos = torch.tensor(pos, device=device)
-        return self.model(pos)['model_out']
+
+        return self.inv_transform(self.model(pos)['model_out'],lib=torch)
 
     def Visibility(self, vids, ch=None):
         '''
