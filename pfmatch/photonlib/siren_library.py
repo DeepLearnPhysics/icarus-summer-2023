@@ -5,7 +5,6 @@ import torch
 import torch.nn as nn
 import yaml
 from ..algorithm.siren_modules import Siren
-from ..algorithm.match_modules import SirenFlash
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 device_ids = list(range(torch.cuda.device_count()))
 # device = torch.device("cpu")
