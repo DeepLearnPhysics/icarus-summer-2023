@@ -13,7 +13,7 @@ class GradientModel(torch.nn.Module):
         self.x = None
         if not flash_algo.plib:
             self.genflash = SirenFlash(flash_algo)
-            pass
+            #pass
         else:
             self.genflash = GenFlash.apply
 

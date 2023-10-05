@@ -2,6 +2,7 @@ import torch
 from torch.autograd import grad
 import torch.nn as nn
 from .siren_modules import Siren
+from ..photonlib.siren_library import SirenLibrary
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 device_ids = list(range(torch.cuda.device_count()))
 # device = torch.device("cpu")
@@ -47,13 +48,16 @@ class SirenFlash(nn.Module):
     def __init__(self, flash_algo, in_features=3, hidden_features=512, hidden_layers=5, out_features=180, outermost_linear=True, omega=30):
         super().__init__()
         self.flash_algo = flash_algo
-        self.model = Siren(in_features, hidden_features, hidden_layers, out_features, outermost_linear, omega)
-        self.model = self.model.float()
-        self.model = torch.nn.DataParallel(self.model, device_ids=device_ids)
-        self.model.cuda()
-        self.model.load_state_dict(torch.load(flash_algo.siren_path))
-#         for param in self.model.parameters():
-#             param.requires_grad = False
+        # self.model = Siren(in_features, hidden_features, hidden_layers, out_features, outermost_linear, omega)
+        # self.model = self.model.float()
+        # self.model = torch.nn.DataParallel(self.model, device_ids=device_ids)
+        # self.model.cuda()
+        # self.model.load_state_dict(torch.load(flash_algo.siren_path))
+
+        ### OR ###
+        
+        print("YES")
+        self.model = SirenLibrary(self.flash_algo.cfg_file)
 
     def forward(self, input):
         coord = self.flash_algo.NormalizePosition(input[:, :3])
