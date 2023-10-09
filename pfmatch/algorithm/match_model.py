@@ -21,7 +21,8 @@ class GradientModel(torch.nn.Module):
         x = self.xshift(input)
         self.x = x[:, 0].min().item()
         if not self.flash_algo.plib:
-            flash = self.genflash(x, self.flash_algo)
+            flash = self.genflash(x)
+            #flash = self.genflash(x, self.flash_algo)
         else:
             flash = self.genflash(x, self.flash_algo)
         return flash

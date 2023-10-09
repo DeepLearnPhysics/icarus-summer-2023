@@ -2,7 +2,7 @@ import torch
 import yaml
 from ..photonlib.siren_library import SirenLibrary
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-# device = torch.device("cpu")
+#TODO: MODIFY TO BE SIREN-COMPATIBLE
 
 class FlashAlgo():
     def __init__(self, detector_specs, photon_library, cfg_file):
@@ -39,6 +39,11 @@ class FlashAlgo():
         Convert position in world coordinate to normalized coordinate      
         '''
         #change to be siren-compatible?
+        #TODO
+        if not self.plib:
+           #return something 
+           pass
+        
         return ((self.plib.Position2AxisID(pos) + 0.5) / self.plib.shape - 0.5) * 2
 
     def fill_estimate(self, track):

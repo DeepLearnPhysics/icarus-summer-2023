@@ -7,8 +7,6 @@ import yaml
 from ..algorithm.siren_modules import Siren
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 device_ids = list(range(torch.cuda.device_count()))
-# device = torch.device("cpu")
-# device_ids = [torch.device("cpu")]
 
 class SirenLibrary(nn.Module):
     def __init__(self, cfg_file, in_features=3, hidden_features=512, hidden_layers=5, out_features=180, outermost_linear=False, omega=30):
