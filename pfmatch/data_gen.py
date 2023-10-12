@@ -15,12 +15,11 @@ class DataGen():
     def __init__(self,detector_cfg, match_cfg, photon_lib=None):
         self.configure(detector_cfg, match_cfg, photon_lib)
         
-    def configure_from_yaml(self, detector_yml, match_yml, photon_lib):
-        fmatch_cfg   = yaml.load(open(match_yml),    Loader=yaml.Loader)
-        detector_cfg = yaml.load(open(detector_yml), Loader=yaml.Loader)['DetectorSpecs']
-        self.configure(detector_cfg, fmatch_cfg, photon_lib)
-        
     def configure(self,detector_cfg, fmatch_cfg, photon_lib):
+        if isinstance(detector_cfg, str):
+            self.detector = yaml.load(open(detector_cfg), Loader=yaml.Loader)['DetectorSpecs']
+        else:
+            self.detector = detector_cfg
         
         gen_cfg = fmatch_cfg['ToyMC']
         self.time_algo  = gen_cfg["TimeAlgo"]
@@ -36,7 +35,7 @@ class DataGen():
         if 'NumpySeed' in gen_cfg:
             np.random.seed(gen_cfg['NumpySeed'])
 
-        self.detector = detector_cfg
+        #self.detector = detector_cfg
         self.plib = photon_lib
         self.qcluster_algo = LightPath(self.detector, fmatch_cfg)
         self.flash_algo = FlashAlgo(self.detector, self.plib, fmatch_cfg)

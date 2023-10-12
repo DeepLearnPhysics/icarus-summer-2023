@@ -31,9 +31,9 @@ class SirenLibrary(nn.Module):
             state_dict['module.net.{}.linear.bias'.format(i)] = state_dict['siren.net.{}.linear.bias'.format(i)]
             state_dict.pop('siren.net.{}.linear.bias'.format(i))
 
-        for k in state_dict.keys():
-            print(k)
-        print(self.model)
+        # for k in state_dict.keys():
+        #     print(k)
+        # print(self.model)
 
         #7th layer is different for some reason
         state_dict['module.net.6.linear.weight'] = state_dict['siren.net.6.linear.weight']

@@ -122,7 +122,7 @@ class Manager():
         
     def calculate_dx0(self, flash, qcluster):
         x0_v = []
-        track_xmin, track_xmax = qcluster.xmin, qcluster.xmax
+        track_xmin, track_xmax = qcluster.qpt_v[:, 1].min(), qcluster.qpt_v[:, 1].max()
         dx_min, dx_max = self.vol_xmin - track_xmin, self.vol_xmax - track_xmax
         dx0 = (flash.time - self.time_shift) * self.drift_velocity
 

@@ -31,7 +31,7 @@ class FlashAlgo():
         self.qe_v = torch.tensor(config["CCVCorrection"], device=device)
         self.siren_path = config["SirenPath"]
         if not self.siren_path and not self.plib:
-          print("Must provide either a photon library file or Siren model path")
+          ("Must provide either a photon library file or Siren model path")
           raise Exception
 
     def NormalizePosition(self, pos):
@@ -61,8 +61,8 @@ class FlashAlgo():
 
         #fill estimate
         if not self.plib:
-          #local_pe_v = torch.sum(self.slib.VisibilityFromXYZ(track[:, :3])*(track[:, 3].unsqueeze(-1)), axis = 0)
-          pass
+          local_pe_v = torch.sum(self.slib.VisibilityFromXYZ(track[:, :3])*(track[:, 3].unsqueeze(-1)), axis = 0)
+          
         else:
           local_pe_v = torch.sum(self.plib.VisibilityFromXYZ(track[:, :3])*(track[:, 3].unsqueeze(-1)), axis = 0)
 
