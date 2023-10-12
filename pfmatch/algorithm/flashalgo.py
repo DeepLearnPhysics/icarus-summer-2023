@@ -38,10 +38,9 @@ class FlashAlgo():
         '''
         Convert position in world coordinate to normalized coordinate      
         '''
-        #change to be siren-compatible?
         #TODO
         if not self.plib:
-           #return something 
+           #use vol_min and vol_max
            pass
         
         return ((self.plib.Position2AxisID(pos) + 0.5) / self.plib.shape - 0.5) * 2
@@ -62,7 +61,6 @@ class FlashAlgo():
         #fill estimate
         if not self.plib:
           local_pe_v = torch.sum(self.slib.VisibilityFromXYZ(track[:, :3])*(track[:, 3].unsqueeze(-1)), axis = 0)
-          
         else:
           local_pe_v = torch.sum(self.plib.VisibilityFromXYZ(track[:, :3])*(track[:, 3].unsqueeze(-1)), axis = 0)
 
