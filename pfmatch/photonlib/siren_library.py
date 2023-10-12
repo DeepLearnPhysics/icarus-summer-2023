@@ -13,11 +13,12 @@ class SirenLibrary(nn.Module):
         #config = yaml.load(open(cfg_file), Loader=yaml.Loader)["PhotonLibHypothesis"]
         config = cfg_file["PhotonLibHypothesis"]
         self.siren_path = config["SirenPath"]
+
         super().__init__()
         self.model = Siren(in_features, hidden_features, hidden_layers, out_features, outermost_linear, omega)
         self.model = self.model.float()
         self.model = torch.nn.DataParallel(self.model, device_ids=device_ids)
-
+        self.model.cuda()
         checkpoint = torch.load(self.siren_path)
         state_dict = checkpoint['state_dict']
 
@@ -46,7 +47,6 @@ class SirenLibrary(nn.Module):
         self.model.load_state_dict(state_dict)
         
         self.voxel_width = 5
-
 
     def inv_transform(self, y, vmax=1, eps=1e-5, sin_out=False, lib=np):
         y0 = np.log10(eps)

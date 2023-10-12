@@ -40,7 +40,7 @@ class FlashAlgo():
         '''
         #TODO
         if not self.plib:
-           #use vol_min and vol_max
+           return pos / (self.vol_max - self.vol_min)
            pass
         
         return ((self.plib.Position2AxisID(pos) + 0.5) / self.plib.shape - 0.5) * 2
